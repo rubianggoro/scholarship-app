@@ -4,7 +4,7 @@ import { Users } from "../../Entities/Users";
 import { MessageType } from "../TypeDefs/Messages";
 
 export const CREATE_USER = {
-  type: UserType,
+  type: MessageType,
   args: {
     name: { type: GraphQLString },
     username: { type: GraphQLString },
@@ -17,7 +17,10 @@ export const CREATE_USER = {
       username,
       password,
     });
-    return args;
+    return {
+      success: true,
+      message: "USER CREATED",
+    };
   },
 };
 
