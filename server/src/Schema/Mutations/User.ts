@@ -12,11 +12,23 @@ export const CREATE_USER = {
   },
   async resolve(parent: any, args: any) {
     const { name, username, password } = args;
-    await Users.insert({
-      name,
-      username,
-      password,
-    });
+    const user = await Users.findOne({ where: { username: username } });
+
+    if (user) {
+      return {
+        success: false,
+        message: "USERNAME EXISTING",
+      };
+    }
+
+    if (!user) {
+      await Users.insert({
+        name,
+        username,
+        password,
+      });
+    }
+
     return {
       success: true,
       message: "USER CREATED",
