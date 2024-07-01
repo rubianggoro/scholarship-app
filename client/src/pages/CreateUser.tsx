@@ -40,7 +40,7 @@ function CreateUserPage() {
     },
   });
 
-  const [createUser, { error }] = useMutation(CREATE_USER);
+  const [createUser] = useMutation(CREATE_USER);
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     const result = await createUser({

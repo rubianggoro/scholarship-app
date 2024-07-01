@@ -4,17 +4,26 @@ import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import CreateUserPage from "./pages/CreateUser";
 import { Toaster } from "./components/ui/toaster";
 
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import Homepage from "./pages/Homepage";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Homepage />,
+    children: [],
+  },
+]);
+
 function App() {
   const client = new ApolloClient({
-    uri: "http://localhost:3001/graphql",
+    uri: `${process.env.REACT_APP_BASE_URL_API}/graphql`,
     cache: new InMemoryCache(),
   });
 
   return (
     <ApolloProvider client={client}>
-      <div className="bg-white">
-        <CreateUserPage />
-      </div>
+      <RouterProvider router={router} />
       <Toaster />
     </ApolloProvider>
   );
