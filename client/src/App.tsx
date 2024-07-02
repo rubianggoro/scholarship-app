@@ -1,17 +1,23 @@
-import React from "react";
 import "./index.css";
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
-import CreateUserPage from "./pages/CreateUser";
 import { Toaster } from "./components/ui/toaster";
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Homepage from "./pages/Homepage";
+import Page404 from "./pages/Page404";
+import Login from "./pages/Login";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Homepage />,
+    errorElement: <Page404 />,
     children: [],
+  },
+  {
+    path: "/login",
+    element: <Login />,
+    errorElement: <Page404 />,
   },
 ]);
 

@@ -26,7 +26,7 @@ const CarouselContentView = () => {
               <div className="w-full">
                 <img
                   className="w-full rounded-md"
-                  src="./assets/carousel.png"
+                  src="/assets/carousel.png"
                   alt=""
                 />
               </div>

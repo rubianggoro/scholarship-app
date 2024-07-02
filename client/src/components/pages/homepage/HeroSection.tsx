@@ -33,7 +33,7 @@ const HeroSection = () => {
       </div>
       <div
         className="bg-cover rounded-ss-md min-h-[760px]"
-        style={{ backgroundImage: "url('./assets/hero.png')" }}
+        style={{ backgroundImage: "url('/assets/hero.png')" }}
       ></div>
     </div>
   );
