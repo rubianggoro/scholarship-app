@@ -1,10 +1,43 @@
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
+import { z } from "zod";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../../ui/form";
+import { Input } from "../../ui/input";
+
+const FormSchema = z.object({
+  email: z.string().min(1, {
+    message: "Email tidak boleh kosong",
+  }),
+  password: z.string().min(1, {
+    message: "Password tidak boleh kosong",
+  }),
+});
 
 export default function LoginView() {
+  const form = useForm<z.infer<typeof FormSchema>>({
+    resolver: zodResolver(FormSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+
+  async function onSubmit(data: z.infer<typeof FormSchema>) {
+    console.log("data submit", data);
+  }
+
   return (
     <>
-      <div className="grid grid-cols-2 min-h-full flex-1">
-        <div className="flex flex-1 flex-col justify-center px-4 py-12 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
+      <div className="grid grid-cols-2 flex-1 min-h-[100vh]">
+        <div className="h-full flex flex-1 flex-col justify-center px-4 py-12 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
           <div className="mx-auto w-full max-w-sm lg:w-96">
             <div>
               <Link to={"/"}>
@@ -23,48 +56,47 @@ export default function LoginView() {
               </p>
             </div>
 
-            <div className="mt-10">
-              <div>
-                <form action="#" method="POST" className="space-y-6">
-                  <div>
-                    <label
-                      htmlFor="email"
-                      className="block text-sm font-medium leading-6 text-gray-900"
-                    >
-                      Email
-                    </label>
-                    <div className="mt-2">
-                      <input
-                        placeholder="Masukkan Email"
-                        id="email"
-                        name="email"
-                        type="email"
-                        autoComplete="off"
-                        required
-                        className="block w-full rounded-md border-0 pl-3 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                      />
-                    </div>
-                  </div>
+            <div className="mt-5">
+              <Form {...form}>
+                <form
+                  onSubmit={form.handleSubmit(onSubmit)}
+                  className="space-y-6"
+                >
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Email</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="email"
+                            placeholder="Masukkan email"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
-                  <div>
-                    <label
-                      htmlFor="password"
-                      className="block text-sm font-medium leading-6 text-gray-900"
-                    >
-                      Kata Sandi
-                    </label>
-                    <div className="mt-2">
-                      <input
-                        placeholder="Masukkan kata sandi"
-                        id="password"
-                        name="password"
-                        type="password"
-                        autoComplete="current-password"
-                        required
-                        className="block w-full rounded-md border-0 pl-3 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                      />
-                    </div>
-                  </div>
+                  <FormField
+                    control={form.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Kata Sandi</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="password"
+                            placeholder="Masukkan kata sandi"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
                   <div className="flex items-center justify-between">
                     <div className="flex items-center">
@@ -97,29 +129,47 @@ export default function LoginView() {
                       type="submit"
                       className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                     >
-                      Sign in
+                      Masuk
                     </button>
                   </div>
                 </form>
-              </div>
+              </Form>
             </div>
 
             <div className="text-center mt-5">
               <p className="text-neutral-500 text-sm font-normal">
                 Belum memiliki akun?
-                <Link to={"/register"} className="text-primary ml-1">
+                <Link
+                  to={"/register"}
+                  className="text-primary ml-1 font-medium"
+                >
                   Buat Akun
                 </Link>
               </p>
             </div>
           </div>
         </div>
-        <div className="relative hidden min-h-[100vh] lg:block">
-          <img
-            className="absolute inset-0 h-full w-full object-cover"
-            src="https://images.unsplash.com/photo-1496917756835-20cb06e75b4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1908&q=80"
-            alt=""
-          />
+        <div className="relative hidden h-full  bg-[#F9FAFB] lg:block">
+          <div className="pl-10 mt-28">
+            <h1 className="text-5xl text-primary font-bold">
+              Cari dan Dapatkan Beasiswa
+            </h1>
+            <div className="flex space-x-3">
+              <p className="text-3xl text-gray-800 font-medium">Hanya di</p>
+              <img
+                className="inline h-10 w-auto"
+                src="/assets/logo.png"
+                alt=""
+              />
+            </div>
+          </div>
+          <div>
+            <img
+              className="min-h-[calc(100vh-200px)]"
+              src="/assets/hero-login.png"
+              alt=""
+            />
+          </div>
         </div>
       </div>
     </>

@@ -7,12 +7,12 @@ export const CREATE_USER = {
   type: MessageType,
   args: {
     name: { type: GraphQLString },
-    username: { type: GraphQLString },
+    email: { type: GraphQLString },
     password: { type: GraphQLString },
   },
   async resolve(parent: any, args: any) {
-    const { name, username, password } = args;
-    const user = await Users.findOne({ where: { username: username } });
+    const { name, email, password } = args;
+    const user = await Users.findOne({ where: { email: email } });
 
     if (user) {
       return {
@@ -24,7 +24,7 @@ export const CREATE_USER = {
     if (!user) {
       await Users.insert({
         name,
-        username,
+        email,
         password,
       });
     }
@@ -39,20 +39,20 @@ export const CREATE_USER = {
 export const UPDATE_PASSWORD = {
   type: MessageType,
   args: {
-    username: { type: GraphQLString },
+    email: { type: GraphQLString },
     oldPassword: { type: GraphQLString },
     newPassword: { type: GraphQLString },
   },
   async resolve(parent: any, args: any) {
-    const { username, oldPassword, newPassword } = args;
-    const user = await Users.findOne({ where: { username: username } });
+    const { email, oldPassword, newPassword } = args;
+    const user = await Users.findOne({ where: { email: email } });
     if (!user) {
       throw new Error("USERNAME DOESNT EXIST");
     }
     const userPassword = user?.password;
 
     if (oldPassword === userPassword) {
-      await Users.update({ username: username }, { password: newPassword });
+      await Users.update({ email: email }, { password: newPassword });
       return {
         success: true,
         message: "PASSWORD UPDATED",
