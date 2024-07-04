@@ -141,7 +141,9 @@ export default function Navbar() {
                     </Button>
                   </Link>
 
-                  <Button size={"sm"}>Daftar Beasiswa</Button>
+                  <Link to={"/register"}>
+                    <Button size={"sm"}>Daftar Beasiswa</Button>
+                  </Link>
                 </div>
               )}
             </div>

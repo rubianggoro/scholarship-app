@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { z } from "zod";
 import {
   Form,
@@ -20,6 +20,9 @@ import {
   CheckCircleIcon,
 } from "@heroicons/react/20/solid";
 import { Button } from "../../ui/button";
+import { useMutation } from "@apollo/client";
+import { CREATE_USER } from "../../../graphql/Mutation";
+import { useToast } from "../../ui/use-toast";
 
 const FormSchema = z.object({
   name: z.string().min(1, {
@@ -53,8 +56,13 @@ export default function RegisterView() {
   const [selectedMailingLists, setSelectedMailingLists] = useState(
     mailingLists[0]
   );
+  const { toast } = useToast();
 
   const [searchParams, setSearchParams] = useSearchParams();
+
+  const navigate = useNavigate();
+
+  const [createUser] = useMutation(CREATE_USER);
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -65,8 +73,34 @@ export default function RegisterView() {
     },
   });
 
+  const isStudent = searchParams.get("isStudent");
+
   async function onSubmit(data: z.infer<typeof FormSchema>) {
-    console.log("data submit", data);
+    // console.log("data submit", data);
+    const result = await createUser({
+      variables: {
+        name: data.name,
+        email: data.email,
+        password: data.password,
+        isStudent: isStudent === "true" ? true : false,
+      },
+    });
+
+    if (result.data?.createUser.success) {
+      form.reset();
+      toast({
+        title: "Berhasil Daftar!",
+        variant: "success",
+        description: "Akun Anda Berhasil Terdaftar",
+      });
+      navigate("/login");
+    } else {
+      toast({
+        title: "Gagal Daftar",
+        variant: "destructive",
+        description: "Username sudah terdaftar",
+      });
+    }
   }
 
   const handleNextStep = () => {
@@ -75,8 +109,6 @@ export default function RegisterView() {
     });
     setSteps(2);
   };
-
-  const isStudent = searchParams.get("isStudent");
 
   return (
     <>
@@ -175,7 +207,7 @@ export default function RegisterView() {
                 <Form {...form}>
                   <form
                     onSubmit={form.handleSubmit(onSubmit)}
-                    className="space-y-6"
+                    className="space-y-4"
                   >
                     <FormField
                       control={form.control}

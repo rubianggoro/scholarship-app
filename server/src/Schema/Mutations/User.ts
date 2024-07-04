@@ -1,7 +1,8 @@
-import { GraphQLID, GraphQLString } from "graphql";
+import { GraphQLBoolean, GraphQLID, GraphQLString } from "graphql";
 import { UserType } from "../TypeDefs/User";
 import { Users } from "../../Entities/Users";
 import { MessageType } from "../TypeDefs/Messages";
+import { IUser } from "../../types";
 
 export const CREATE_USER = {
   type: MessageType,
@@ -9,9 +10,10 @@ export const CREATE_USER = {
     name: { type: GraphQLString },
     email: { type: GraphQLString },
     password: { type: GraphQLString },
+    isStudent: { type: GraphQLBoolean },
   },
-  async resolve(parent: any, args: any) {
-    const { name, email, password } = args;
+  async resolve(parent: any, args: IUser) {
+    const { name, email, password, isStudent } = args;
     const user = await Users.findOne({ where: { email: email } });
 
     if (user) {
@@ -26,6 +28,7 @@ export const CREATE_USER = {
         name,
         email,
         password,
+        isStudent,
       });
     }
 
