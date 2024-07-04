@@ -2,7 +2,6 @@ import { GraphQLBoolean, GraphQLID, GraphQLString } from "graphql";
 import { UserType } from "../TypeDefs/User";
 import { Users } from "../../Entities/Users";
 import { MessageType } from "../TypeDefs/Messages";
-import { IUser } from "../../types";
 
 export const CREATE_USER = {
   type: MessageType,
@@ -12,7 +11,7 @@ export const CREATE_USER = {
     password: { type: GraphQLString },
     isStudent: { type: GraphQLBoolean },
   },
-  async resolve(parent: any, args: IUser) {
+  async resolve(parent: any, args: any) {
     const { name, email, password, isStudent } = args;
     const user = await Users.findOne({ where: { email: email } });
 
@@ -79,5 +78,38 @@ export const DELETE_USER = {
       success: true,
       message: "DELETE USER SUCCESS",
     };
+  },
+};
+
+export const LOGIN = {
+  type: MessageType,
+  args: {
+    email: { type: GraphQLString },
+    password: { type: GraphQLString },
+  },
+  async resolve(parent: any, args: any) {
+    const { email, password } = args;
+    const user = await Users.findOne({ where: { email: email } });
+
+    if (!user) {
+      return {
+        success: false,
+        message: "USER DOESN'T EXIST",
+      };
+    }
+
+    if (user) {
+      if (password !== user.password) {
+        return {
+          success: false,
+          message: "EMAIL OR PASSWORD NOT MATCH",
+        };
+      } else {
+        return {
+          success: true,
+          message: "LOGIN SUCCESFULLY",
+        };
+      }
+    }
   },
 };

@@ -62,7 +62,7 @@ export default function RegisterView() {
 
   const navigate = useNavigate();
 
-  const [createUser] = useMutation(CREATE_USER);
+  const [createUser, { loading }] = useMutation(CREATE_USER);
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -276,8 +276,12 @@ export default function RegisterView() {
                     />
 
                     <div className="mt-10">
-                      <Button type="submit" className="w-full">
-                        Daftar
+                      <Button
+                        disabled={loading}
+                        type="submit"
+                        className="w-full"
+                      >
+                        {loading ? "Loading..." : "Daftar"}
                       </Button>
                     </div>
                   </form>

@@ -22,7 +22,9 @@ function classNames(...classes: any) {
 }
 
 export default function Navbar() {
-  const isLoggedIn = false;
+  const handleSignOut = () => {};
+  const isLoggedIn =
+    sessionStorage.getItem("isLoggedIn") === "true" ? true : false;
   return (
     <Disclosure as="nav" className="bg-white border-b">
       {({ open }) => (
@@ -119,15 +121,15 @@ export default function Navbar() {
                       </MenuItem>
                       <MenuItem>
                         {({ focus }) => (
-                          <a
-                            href="#"
+                          <Link
+                            to="/logout"
                             className={classNames(
                               focus ? "bg-gray-100" : "",
                               "block px-4 py-2 text-sm text-gray-700"
                             )}
                           >
                             Sign out
-                          </a>
+                          </Link>
                         )}
                       </MenuItem>
                     </MenuItems>

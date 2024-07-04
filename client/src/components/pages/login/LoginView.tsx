@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { z } from "zod";
 import {
   Form,
@@ -11,6 +11,10 @@ import {
   FormMessage,
 } from "../../ui/form";
 import { Input } from "../../ui/input";
+import { useMutation } from "@apollo/client";
+import { LOGIN } from "../../../graphql/Mutation";
+import { Button } from "../../ui/button";
+import { useEffect, useState } from "react";
 
 const FormSchema = z.object({
   email: z.string().min(1, {
@@ -22,6 +26,8 @@ const FormSchema = z.object({
 });
 
 export default function LoginView() {
+  const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate();
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -30,8 +36,34 @@ export default function LoginView() {
     },
   });
 
+  useEffect(() => {
+    if (sessionStorage.getItem("isLoggedIn") === "true") {
+      navigate("/");
+    }
+  }, []);
+
+  useEffect(() => {
+    setErrorMessage("");
+  }, [form.watch("email") || form.watch("password")]);
+
+  const [login, { loading }] = useMutation(LOGIN);
+
   async function onSubmit(data: z.infer<typeof FormSchema>) {
-    console.log("data submit", data);
+    const result = await login({
+      variables: data,
+    });
+    if (result.data.login.success) {
+      navigate("/");
+      sessionStorage.setItem("isLoggedIn", "true");
+      sessionStorage.setItem("email_user", data.email);
+    } else {
+      if (result.data.login.message === "USER DOESN'T EXIST") {
+        setErrorMessage("User tidak terdaftar!");
+      }
+      if (result.data.login.message === "EMAIL OR PASSWORD NOT MATCH") {
+        setErrorMessage("Email/password tidak sesuai");
+      }
+    }
   }
 
   return (
@@ -55,6 +87,14 @@ export default function LoginView() {
                 Mulai dan dapatkan beasiswa.
               </p>
             </div>
+
+            {errorMessage ? (
+              <div className="border-2 border-red-500 bg-red-50 p-2 rounded-md">
+                <p className="text-red-500 text-sm font-normal">
+                  {errorMessage}
+                </p>
+              </div>
+            ) : null}
 
             <div className="mt-5">
               <Form {...form}>
@@ -98,7 +138,7 @@ export default function LoginView() {
                     )}
                   />
 
-                  <div className="flex items-center justify-between">
+                  {/* <div className="flex items-center justify-between">
                     <div className="flex items-center">
                       <input
                         id="remember-me"
@@ -122,15 +162,12 @@ export default function LoginView() {
                         Forgot password?
                       </a>
                     </div>
-                  </div>
+                  </div> */}
 
                   <div>
-                    <button
-                      type="submit"
-                      className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                    >
-                      Masuk
-                    </button>
+                    <Button disabled={loading} type="submit" className="w-full">
+                      {loading ? "Loading..." : "Masuk"}
+                    </Button>
                   </div>
                 </form>
               </Form>
