@@ -20,7 +20,7 @@ const ScholarshipNewest = () => {
       <div className="mt-10 grid grid-cols-4 gap-5">
         {Array.from({ length: 4 }).map((_, index) => {
           return (
-            <Link to={"#"} key={index}>
+            <Link to={"/scholarship/1"} key={index}>
               <Card className="rounded-md hover:bg-gray-100">
                 <CardHeader className="bg-blue-400 min-h-[200px] rounded-t-md">
                   <Badge variant={"secondary"} className="w-fit">

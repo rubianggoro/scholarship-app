@@ -6,7 +6,6 @@ import {
   LOGIN,
   UPDATE_PASSWORD,
 } from "./Mutations/User";
-import { UPLOAD_FILE } from "./Mutations/File";
 
 const RootQuery = new GraphQLObjectType({
   name: "RootQuery",
@@ -22,7 +21,6 @@ const Mutation = new GraphQLObjectType({
     deleteUser: DELETE_USER,
     updatePassword: UPDATE_PASSWORD,
     login: LOGIN,
-    uploadFile: UPLOAD_FILE,
   },
 });
 
