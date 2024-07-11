@@ -1,16 +1,18 @@
 import { GraphQLSchema, GraphQLObjectType } from "graphql";
-import { GET_ALL_USERS } from "./Queries/User";
+import { GET_ALL_USERS, GET_USER_BY_EMAIL } from "./Queries/User";
 import {
   CREATE_USER,
   DELETE_USER,
   LOGIN,
   UPDATE_PASSWORD,
 } from "./Mutations/User";
+import { CREATE_SCHOLARSHIP } from "./Mutations/Scholarship";
 
 const RootQuery = new GraphQLObjectType({
   name: "RootQuery",
   fields: {
     getAllUsers: GET_ALL_USERS,
+    getUserByEmail: GET_USER_BY_EMAIL,
   },
 });
 
@@ -21,6 +23,8 @@ const Mutation = new GraphQLObjectType({
     deleteUser: DELETE_USER,
     updatePassword: UPDATE_PASSWORD,
     login: LOGIN,
+
+    createScholarship: CREATE_SCHOLARSHIP,
   },
 });
 

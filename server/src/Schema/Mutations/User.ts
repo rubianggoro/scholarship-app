@@ -1,5 +1,4 @@
 import { GraphQLBoolean, GraphQLID, GraphQLString } from "graphql";
-import { UserType } from "../TypeDefs/User";
 import { Users } from "../../Entities/Users";
 import { MessageType } from "../TypeDefs/Messages";
 

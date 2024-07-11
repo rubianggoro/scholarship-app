@@ -9,10 +9,13 @@ import {
 } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Button } from "../ui/button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useQuery } from "@apollo/client";
+import { GET_USER_BY_EMAIL } from "../../graphql/Query";
+import { useEffect } from "react";
 
 const navigation = [
-  { name: "Portal Beasiswa", href: "#", current: true },
+  { name: "Portal Beasiswa", href: "#", current: false },
   { name: "Forum", href: "#", current: false },
   { name: "Berita", href: "#", current: false },
 ];
@@ -22,9 +25,14 @@ function classNames(...classes: any) {
 }
 
 export default function Navbar() {
-  const handleSignOut = () => {};
+  const navigate = useNavigate();
   const isLoggedIn =
     sessionStorage.getItem("isLoggedIn") === "true" ? true : false;
+  const email = sessionStorage.getItem("email_user") || "";
+  const { data } = useQuery(GET_USER_BY_EMAIL, {
+    variables: { email: email },
+  });
+
   return (
     <Disclosure as="nav" className="bg-white border-b">
       {({ open }) => (
@@ -45,11 +53,13 @@ export default function Navbar() {
               </div>
               <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                 <div className="flex flex-shrink-0 items-center">
-                  <img
-                    className="h-6 w-auto"
-                    src="/assets/logo.png"
-                    alt="Your Company"
-                  />
+                  <Link to={"/"}>
+                    <img
+                      className="h-6 w-auto"
+                      src="/assets/logo.png"
+                      alt="Your Company"
+                    />
+                  </Link>
                 </div>
                 <div className="hidden sm:ml-6 sm:block">
                   <div className="flex space-x-4">
@@ -74,7 +84,16 @@ export default function Navbar() {
 
               {isLoggedIn ? (
                 <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                  <Button size={"sm"}>Cari Beasiswa</Button>
+                  {data?.getUserByEmail?.isStudent ? (
+                    <Button size={"sm"}>Cari Beasiswa</Button>
+                  ) : (
+                    <Button
+                      size={"sm"}
+                      onClick={() => navigate("/scholarship/upload")}
+                    >
+                      Unggah Beasiswa
+                    </Button>
+                  )}
 
                   {/* Profile dropdown */}
                   <Menu as="div" className="relative ml-3">

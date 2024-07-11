@@ -8,6 +8,7 @@ import Login from "./pages/Login";
 import RegisterPage from "./pages/Register";
 import Logout from "./pages/Logout";
 import ScholarshipDetail from "./pages/scholarship/ScholarshipDetail";
+import ScholarshipUpload from "./pages/scholarship/ScholarshipUpload";
 
 const router = createBrowserRouter([
   {
@@ -34,6 +35,11 @@ const router = createBrowserRouter([
   {
     path: "/scholarship/:id",
     element: <ScholarshipDetail />,
+    errorElement: <Page404 />,
+  },
+  {
+    path: "/scholarship/upload",
+    element: <ScholarshipUpload />,
     errorElement: <Page404 />,
   },
 ]);

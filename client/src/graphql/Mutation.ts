@@ -27,3 +27,28 @@ export const LOGIN = gql`
     }
   }
 `;
+
+export const CREATE_SCHOLARSHIP = gql`
+  mutation createScholarship(
+    $user_id: Int!
+    $name: String!
+    $level_student: String!
+    $short_description: String!
+    $detailed_description: String!
+    $banner_image: String!
+    $document_upload: [String!]!
+  ) {
+    createScholarship(
+      user_id: $user_id
+      name: $name
+      level_student: $level_student
+      short_description: $short_description
+      detailed_description: $detailed_description
+      banner_image: $banner_image
+      document_upload: $document_upload
+    ) {
+      success
+      message
+    }
+  }
+`;

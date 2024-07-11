@@ -76,7 +76,6 @@ export default function RegisterView() {
   const isStudent = searchParams.get("isStudent");
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
-    // console.log("data submit", data);
     const result = await createUser({
       variables: {
         name: data.name,
