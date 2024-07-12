@@ -9,3 +9,24 @@ export const GET_USER_BY_EMAIL = gql`
     }
   }
 `;
+
+export const GET_ALL_SCHOLARSHIP = gql`
+  query {
+    getAllScholarships {
+      id
+      name
+      banner_image
+      short_description
+    }
+  }
+`;
+
+export const GET_SCHOLARSHIP_BY_ID = gql`
+  query getScholarById($id: String!) {
+    getScholarById(id: $id) {
+      id
+      name
+      isStudent
+    }
+  }
+`;

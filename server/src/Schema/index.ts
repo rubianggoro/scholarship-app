@@ -7,12 +7,19 @@ import {
   UPDATE_PASSWORD,
 } from "./Mutations/User";
 import { CREATE_SCHOLARSHIP } from "./Mutations/Scholarship";
+import {
+  GET_ALL_SCHOLARSHIP,
+  GET_SCHOLARSHIP_BY_ID,
+} from "./Queries/Scholarship";
 
 const RootQuery = new GraphQLObjectType({
   name: "RootQuery",
   fields: {
     getAllUsers: GET_ALL_USERS,
     getUserByEmail: GET_USER_BY_EMAIL,
+
+    getAllScholarships: GET_ALL_SCHOLARSHIP,
+    getScholarById: GET_SCHOLARSHIP_BY_ID,
   },
 });
 

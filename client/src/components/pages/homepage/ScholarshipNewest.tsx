@@ -3,8 +3,12 @@ import { Badge } from "../../ui/badge";
 import { Card, CardContent, CardHeader } from "../../ui/card";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
+import { GET_ALL_SCHOLARSHIP } from "../../../graphql/Query";
+import { useQuery } from "@apollo/client";
 
 const ScholarshipNewest = () => {
+  const { data } = useQuery(GET_ALL_SCHOLARSHIP);
+
   return (
     <div className="mx-auto max-w-7xl py-10 px-2 sm:px-6 lg:px-8">
       <div className="text-center">
@@ -18,33 +22,39 @@ const ScholarshipNewest = () => {
       </div>
 
       <div className="mt-10 grid grid-cols-4 gap-5">
-        {Array.from({ length: 4 }).map((_, index) => {
-          return (
-            <Link to={"/scholarship/1"} key={index}>
-              <Card className="rounded-md hover:bg-gray-100">
-                <CardHeader className="bg-blue-400 min-h-[200px] rounded-t-md">
-                  <Badge variant={"secondary"} className="w-fit">
-                    Terbaru
-                  </Badge>
-                </CardHeader>
-                <CardContent>
-                  <h4 className="scroll-m-20 text-xl font-bold">
-                    Beasiswa Internusantara 2024
-                  </h4>
-                  <p className="text-sm font-normal text-gray-800 mt-2">
-                    mattis rhoncus urna neque viverra justo nec ultrices dui
-                    sapien eget mi
-                  </p>
-                  <p className="text-xs font-normal text-gray-500 mt-1">
-                    Deadline •{" "}
-                    <span className="text-blue-600 font-medium">
-                      24 Desember 2024
-                    </span>
-                  </p>
-                </CardContent>
-              </Card>
-            </Link>
-          );
+        {data?.getAllScholarships?.map((val: any, index: number) => {
+          if (index < 4) {
+            return (
+              <Link to={`/scholarship/${val.id}`} key={val.id}>
+                <Card className="rounded-md hover:bg-gray-100">
+                  <CardHeader className="relative bg-blue-400 min-h-[200px] rounded-t-md">
+                    <img
+                      src={val.banner_image}
+                      alt="alt"
+                      className="max-h-[150px] object-cover"
+                    />
+                    <Badge variant={"secondary"} className="w-fit absolute">
+                      Terbaru
+                    </Badge>
+                  </CardHeader>
+                  <CardContent>
+                    <h4 className="scroll-m-20 text-xl font-bold ">
+                      {val?.name}
+                    </h4>
+                    <p className="text-sm font-normal text-gray-800 mt-2 truncate overflow-hidden whitespace-nowrap">
+                      {val.short_description}
+                    </p>
+                    <p className="text-xs font-normal text-gray-500 mt-1">
+                      Deadline •{" "}
+                      <span className="text-blue-600 font-medium">
+                        24 Desember 2024
+                      </span>
+                    </p>
+                  </CardContent>
+                </Card>
+              </Link>
+            );
+          }
         })}
       </div>
 
