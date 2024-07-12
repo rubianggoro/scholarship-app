@@ -1,4 +1,12 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from "typeorm";
+import { Users } from "./Users";
 
 @Entity()
 export class Scholarship extends BaseEntity {
@@ -7,6 +15,10 @@ export class Scholarship extends BaseEntity {
 
   @Column()
   user_id!: number;
+
+  @ManyToOne(() => Users, (user) => user.id)
+  @JoinColumn({ name: "user_id" })
+  user!: Users;
 
   @Column()
   name!: string;

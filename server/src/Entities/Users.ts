@@ -1,4 +1,12 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  JoinColumn,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from "typeorm";
+import { Scholarship } from "./Scholarship";
 
 @Entity()
 export class Users extends BaseEntity {
@@ -16,4 +24,7 @@ export class Users extends BaseEntity {
 
   @Column()
   isStudent!: boolean;
+
+  @OneToMany(() => Scholarship, (scholar) => scholar.user)
+  scholarship!: Scholarship[];
 }
