@@ -26,7 +26,14 @@ export const GET_SCHOLARSHIP_BY_ID = gql`
     getScholarById(id: $id) {
       id
       name
-      isStudent
+      level_student
+      short_description
+      detailed_description
+      banner_image
+      document_upload
+      user {
+        name
+      }
     }
   }
 `;
