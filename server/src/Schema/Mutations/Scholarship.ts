@@ -1,7 +1,7 @@
 import { GraphQLInt, GraphQLList, GraphQLString } from "graphql";
-import { Users } from "../../Entities/Users";
 import { MessageType } from "../TypeDefs/Messages";
 import { Scholarship } from "../../Entities/Scholarship";
+import { GraphQLDate } from "graphql-iso-date";
 
 export const CREATE_SCHOLARSHIP = {
   type: MessageType,
@@ -13,6 +13,7 @@ export const CREATE_SCHOLARSHIP = {
     detailed_description: { type: GraphQLString },
     banner_image: { type: GraphQLString },
     document_upload: { type: new GraphQLList(GraphQLString) },
+    deadline: { type: GraphQLString },
   },
   async resolve(parent: any, args: any) {
     const {
@@ -23,6 +24,7 @@ export const CREATE_SCHOLARSHIP = {
       detailed_description,
       banner_image,
       document_upload,
+      deadline,
     } = args;
 
     await Scholarship.insert({
@@ -33,6 +35,7 @@ export const CREATE_SCHOLARSHIP = {
       detailed_description,
       banner_image,
       document_upload,
+      deadline,
     });
 
     return {

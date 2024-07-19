@@ -37,6 +37,7 @@ export const CREATE_SCHOLARSHIP = gql`
     $detailed_description: String!
     $banner_image: String!
     $document_upload: [String!]!
+    $deadline: String!
   ) {
     createScholarship(
       user_id: $user_id
@@ -46,6 +47,7 @@ export const CREATE_SCHOLARSHIP = gql`
       detailed_description: $detailed_description
       banner_image: $banner_image
       document_upload: $document_upload
+      deadline: $deadline
     ) {
       success
       message

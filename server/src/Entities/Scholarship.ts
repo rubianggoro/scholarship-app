@@ -1,6 +1,7 @@
 import {
   BaseEntity,
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
@@ -37,4 +38,7 @@ export class Scholarship extends BaseEntity {
 
   @Column("json")
   document_upload!: string[];
+
+  @Column()
+  deadline!: Date;
 }

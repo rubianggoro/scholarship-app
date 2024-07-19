@@ -28,6 +28,14 @@ import { CREATE_SCHOLARSHIP } from "../../graphql/Mutation";
 import { useToast } from "../../components/ui/use-toast";
 import { useNavigate } from "react-router-dom";
 import { GET_USER_BY_EMAIL } from "../../graphql/Query";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "../../components/ui/popover";
+import { cn, FormatDateLocal } from "../../lib/utils";
+import { CalendarIcon } from "@heroicons/react/20/solid";
+import { Calendar } from "../../components/ui/calendar";
 
 const FormSchema = z.object({
   name: z.string().min(1, {
@@ -50,6 +58,9 @@ const FormSchema = z.object({
     .refine((value) => value.some((item) => item), {
       message: "Dokumen tidak boleh kosong",
     }),
+  deadline: z.date({
+    required_error: "Deadline tidak boleh kosong",
+  }),
 });
 
 const items = [
@@ -103,6 +114,7 @@ const ScholarshipUpload = () => {
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     const payload = {
       ...data,
+      deadline: FormatDateLocal(data.deadline),
       user_id: Number(user?.getUserByEmail?.id),
     };
     const result = await createScholarship({
@@ -182,6 +194,45 @@ const ScholarshipUpload = () => {
                           })}
                         </SelectContent>
                       </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="deadline"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col">
+                      <FormLabel>Deadline Beasiswa</FormLabel>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <FormControl>
+                            <Button
+                              variant={"outline"}
+                              className={cn(
+                                "w-full pl-3 text-left font-normal border border-neutral-400 mt-1",
+                                !field.value && "text-muted-foreground"
+                              )}
+                            >
+                              {field.value ? (
+                                new Date(field.value).toLocaleDateString("id")
+                              ) : (
+                                <span>Pilih deadline</span>
+                              )}
+                              <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                            </Button>
+                          </FormControl>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0" align="start">
+                          <Calendar
+                            mode="single"
+                            selected={field.value}
+                            onSelect={field.onChange}
+                            initialFocus
+                          />
+                        </PopoverContent>
+                      </Popover>
                       <FormMessage />
                     </FormItem>
                   )}

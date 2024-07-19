@@ -3,6 +3,7 @@ import Navbar from "../../components/layout/Navbar";
 import { GET_SCHOLARSHIP_BY_ID } from "../../graphql/Query";
 import { useParams } from "react-router-dom";
 import { UserIcon } from "@heroicons/react/24/outline";
+import { FormatDate } from "../../lib/utils";
 
 const ScholarshipDetail = () => {
   let { id } = useParams();
@@ -12,8 +13,6 @@ const ScholarshipDetail = () => {
   });
 
   const detail = data?.getScholarById;
-
-  console.log("detail", detail);
 
   return (
     <>
@@ -52,7 +51,7 @@ const ScholarshipDetail = () => {
               <div>
                 <p className="text-blue-600 text-sm">Deadline Submisi</p>
                 <p className="flex items-center space-x-2 font-medium text-neutral-950 text-lg">
-                  17 Jan 2022
+                  {FormatDate(new Date(detail?.deadline))}
                 </p>
               </div>
             </div>

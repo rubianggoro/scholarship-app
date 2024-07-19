@@ -31,6 +31,7 @@ export const GET_SCHOLARSHIP_BY_ID = gql`
       detailed_description
       banner_image
       document_upload
+      deadline
       user {
         name
       }

@@ -1,7 +1,6 @@
 import { GraphQLList, GraphQLString } from "graphql";
 import { Scholarship } from "../../Entities/Scholarship";
 import { ScholarshipType } from "../TypeDefs/Scholarship";
-import { Users } from "../../Entities/Users";
 
 export const GET_ALL_SCHOLARSHIP = {
   type: new GraphQLList(ScholarshipType),

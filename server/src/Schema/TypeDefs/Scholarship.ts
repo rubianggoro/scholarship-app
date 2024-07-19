@@ -7,6 +7,7 @@ import {
 } from "graphql";
 import { UserType } from "./User";
 import { Users } from "../../Entities/Users";
+import { GraphQLDateTime } from "graphql-iso-date";
 
 export const ScholarshipType = new GraphQLObjectType({
   name: "Scholarship",
@@ -19,6 +20,7 @@ export const ScholarshipType = new GraphQLObjectType({
     detailed_description: { type: GraphQLString },
     banner_image: { type: GraphQLString },
     document_upload: { type: new GraphQLList(GraphQLString) },
+    deadline: { type: GraphQLDateTime },
     user: {
       type: UserType,
       resolve(parent, args) {
