@@ -9,6 +9,8 @@ import RegisterPage from "./pages/Register";
 import Logout from "./pages/Logout";
 import ScholarshipDetail from "./pages/scholarship/ScholarshipDetail";
 import ScholarshipUpload from "./pages/scholarship/ScholarshipUpload";
+import DashboardSponsorship from "./pages/dashboard-sponsorship/Layout";
+import ScholarshipPage from "./pages/dashboard-sponsorship/ScholarshipPage";
 
 const router = createBrowserRouter([
   {
@@ -30,6 +32,16 @@ const router = createBrowserRouter([
   {
     path: "/logout",
     element: <Logout />,
+    errorElement: <Page404 />,
+  },
+  {
+    path: "/:user_id/dashboard",
+    element: <ScholarshipDetail />,
+    errorElement: <Page404 />,
+  },
+  {
+    path: "/:user_id/dashboard-sponsorship",
+    element: <ScholarshipPage />,
     errorElement: <Page404 />,
   },
   {

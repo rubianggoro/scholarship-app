@@ -54,3 +54,28 @@ export const CREATE_SCHOLARSHIP = gql`
     }
   }
 `;
+
+export const CREATE_APPLICANTS = gql`
+  mutation createApplicants(
+    $user_id: Int!
+    $scholarship_id: Int!
+    $name: String!
+    $last_education: String!
+    $short_self_desc: String!
+    $document_upload: String!
+    $status: Int!
+  ) {
+    createApplicants(
+      user_id: $user_id
+      scholarship_id: $scholarship_id
+      name: $name
+      last_education: $last_education
+      short_self_desc: $short_self_desc
+      document_upload: $document_upload
+      status: $status
+    ) {
+      success
+      message
+    }
+  }
+`;

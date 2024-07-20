@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { z } from "zod";
 import {
   Form,
@@ -26,6 +26,9 @@ const FormSchema = z.object({
 });
 
 export default function LoginView() {
+  const [searchParams] = useSearchParams();
+  const from = searchParams.get("from");
+
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -53,7 +56,11 @@ export default function LoginView() {
       variables: data,
     });
     if (result.data.login.success) {
-      navigate("/");
+      if (from) {
+        navigate(from);
+      } else {
+        navigate("/");
+      }
       sessionStorage.setItem("isLoggedIn", "true");
       sessionStorage.setItem("email_user", data.email);
     } else {
