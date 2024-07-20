@@ -2,11 +2,8 @@ import {
   GraphQLObjectType,
   GraphQLID,
   GraphQLString,
-  GraphQLList,
   GraphQLInt,
 } from "graphql";
-import { UserType } from "./User";
-import { Users } from "../../Entities/Users";
 
 export const ApplicantsType = new GraphQLObjectType({
   name: "Applicants",

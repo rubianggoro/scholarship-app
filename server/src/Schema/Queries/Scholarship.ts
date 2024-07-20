@@ -20,3 +20,11 @@ export const GET_SCHOLARSHIP_BY_ID = {
     return await Scholarship.findOne({ where: { id: args.id } });
   },
 };
+
+export const GET_SCHOLARSHIP_BY_USER_ID = {
+  type: new GraphQLList(ScholarshipType),
+  args: { user_id: { type: GraphQLString } },
+  async resolve(parent: any, args: any) {
+    return await Scholarship.find({ where: { user_id: args.user_id } });
+  },
+};

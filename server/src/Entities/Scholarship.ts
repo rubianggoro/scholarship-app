@@ -4,9 +4,11 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { Users } from "./Users";
+import { Applicants } from "./Applicants";
 
 @Entity()
 export class Scholarship extends BaseEntity {
@@ -40,4 +42,7 @@ export class Scholarship extends BaseEntity {
 
   @Column()
   deadline!: Date;
+
+  @OneToMany(() => Applicants, (applicant) => applicant.scholarship_id)
+  applicants!: Applicants[];
 }
