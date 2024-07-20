@@ -41,3 +41,35 @@ export const CREATE_APPLICANTS = {
     };
   },
 };
+
+export const UPDATE_STATUS_APPLICANT = {
+  type: MessageType,
+  args: {
+    id: { type: GraphQLInt },
+    status: { type: GraphQLInt },
+  },
+  async resolve(parent: any, args: any) {
+    const { id, status } = args;
+
+    const applicant = await Applicants.findOne({ where: { id: id } });
+
+    if (!applicant) {
+      return {
+        success: false,
+        message: "FAILED UPDATE",
+      };
+    }
+
+    if (applicant) {
+      await Applicants.save({
+        id,
+        status,
+      });
+    }
+
+    return {
+      success: true,
+      message: "APPLICANTS STATUS UPDATED",
+    };
+  },
+};

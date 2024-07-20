@@ -27,7 +27,11 @@ import { useMutation, useQuery } from "@apollo/client";
 import { CREATE_SCHOLARSHIP } from "../../graphql/Mutation";
 import { useToast } from "../../components/ui/use-toast";
 import { useNavigate } from "react-router-dom";
-import { GET_USER_BY_EMAIL } from "../../graphql/Query";
+import {
+  GET_ALL_SCHOLARSHIP,
+  GET_SCHOLARSHIP_BY_USER_ID,
+  GET_USER_BY_EMAIL,
+} from "../../graphql/Query";
 import {
   Popover,
   PopoverContent,
@@ -109,7 +113,17 @@ const ScholarshipUpload = () => {
     },
   });
 
-  const [createScholarship, { loading }] = useMutation(CREATE_SCHOLARSHIP);
+  const [createScholarship, { loading }] = useMutation(CREATE_SCHOLARSHIP, {
+    refetchQueries: [
+      {
+        query: GET_ALL_SCHOLARSHIP,
+      },
+      {
+        query: GET_SCHOLARSHIP_BY_USER_ID,
+        variables: { user_id: user?.getUserByEmail?.id },
+      },
+    ],
+  });
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     const payload = {

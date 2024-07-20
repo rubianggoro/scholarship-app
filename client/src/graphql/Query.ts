@@ -38,3 +38,37 @@ export const GET_SCHOLARSHIP_BY_ID = gql`
     }
   }
 `;
+
+export const GET_SCHOLARSHIP_DASHBOARD_BY_ID = gql`
+  query getScholarById($id: String!) {
+    getScholarById(id: $id) {
+      id
+      name
+      level_student
+      short_description
+      detailed_description
+      banner_image
+      document_upload
+      deadline
+      applicants {
+        id
+        name
+        last_education
+        short_self_desc
+        document_upload
+        status
+      }
+    }
+  }
+`;
+
+export const GET_SCHOLARSHIP_BY_USER_ID = gql`
+  query getScholarByUserId($user_id: String!) {
+    getScholarByUserId(user_id: $user_id) {
+      id
+      name
+      level_student
+      deadline
+    }
+  }
+`;

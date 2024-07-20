@@ -26,7 +26,12 @@ export const ScholarshipType = new GraphQLObjectType({
     applicants: {
       type: new GraphQLList(ApplicantsType),
       resolve(parent, args) {
-        return Applicants.find({ where: { scholarship_id: parent.id } });
+        return Applicants.find({
+          where: { scholarship_id: parent.id },
+          order: {
+            id: "DESC",
+          },
+        });
       },
     },
     user: {

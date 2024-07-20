@@ -1,19 +1,20 @@
 import { PlusIcon } from "@heroicons/react/20/solid";
-import { BreadcrumbView } from "../../components/ui/breadcrumbview";
-import { Button } from "../../components/ui/button";
-import { DataTable } from "../../components/ui/data-table";
-import DashboardSponsorship from "./Layout";
-import { Link } from "react-router-dom";
+import { BreadcrumbView } from "../../../components/ui/breadcrumbview";
+import { Button } from "../../../components/ui/button";
+import { DataTable } from "../../../components/ui/data-table";
+import DashboardSponsorship from "../Layout";
+import { Link, useParams } from "react-router-dom";
+import { useQuery } from "@apollo/client";
+import { GET_SCHOLARSHIP_BY_USER_ID } from "../../../graphql/Query";
+import { FormatDate } from "../../../lib/utils";
 
 const ScholarshipPage = () => {
-  const data = [
-    {
-      id: 1,
-      name: "Beasiswa Mahasiswa Nasional dan Internasional",
-      level_student: "SMA/SMK Sederajat",
-      deadline: "2024-07-01",
-    },
-  ];
+  const { user_id } = useParams();
+
+  const { data } = useQuery(GET_SCHOLARSHIP_BY_USER_ID, {
+    variables: { user_id },
+  });
+
   const columns = [
     {
       accessorKey: "no_column",
@@ -30,20 +31,29 @@ const ScholarshipPage = () => {
     {
       accessorKey: "deadline",
       header: "Deadline",
+      cell: ({ row }: any) => {
+        return FormatDate(new Date(row.getValue("deadline")));
+      },
     },
     {
       accessorKey: "id",
       header: "Aksi",
       cell: ({ row }: any) => {
         return (
-          <div className="space-x-1">
+          <div className="space-x-2">
             <Button size={"sm"} variant={"destructive"}>
               Hapus
             </Button>
             <Button size={"sm"} variant={"outline"}>
               Edit
             </Button>
-            <Button size={"sm"}>Lihat Detail</Button>
+            <Link
+              to={`/${user_id}/dashboard-sponsorship/scholarship/${row.getValue(
+                "id"
+              )}`}
+            >
+              <Button size={"sm"}>Lihat Detail</Button>
+            </Link>
           </div>
         );
       },
@@ -77,7 +87,7 @@ const ScholarshipPage = () => {
         </div>
 
         <div className="mt-5">
-          <DataTable columns={columns} data={data} />
+          <DataTable columns={columns} data={data?.getScholarByUserId || []} />
         </div>
       </>
     </DashboardSponsorship>

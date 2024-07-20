@@ -79,3 +79,12 @@ export const CREATE_APPLICANTS = gql`
     }
   }
 `;
+
+export const UPDATE_STATUS_APPLICANT = gql`
+  mutation updateStatusApplicant($id: Int!, $status: Int!) {
+    updateStatusApplicant(id: $id, status: $status) {
+      success
+      message
+    }
+  }
+`;
