@@ -1,7 +1,6 @@
 import { GraphQLInt, GraphQLList, GraphQLString } from "graphql";
 import { MessageType } from "../TypeDefs/Messages";
 import { Scholarship } from "../../Entities/Scholarship";
-import { GraphQLDate } from "graphql-iso-date";
 
 export const CREATE_SCHOLARSHIP = {
   type: MessageType,

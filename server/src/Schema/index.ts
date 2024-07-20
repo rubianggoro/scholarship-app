@@ -11,6 +11,8 @@ import {
   GET_ALL_SCHOLARSHIP,
   GET_SCHOLARSHIP_BY_ID,
 } from "./Queries/Scholarship";
+import { GET_ALL_APPLICANTS } from "./Queries/Applicants";
+import { CREATE_APPLICANTS } from "./Mutations/Applicants";
 
 const RootQuery = new GraphQLObjectType({
   name: "RootQuery",
@@ -20,6 +22,8 @@ const RootQuery = new GraphQLObjectType({
 
     getAllScholarships: GET_ALL_SCHOLARSHIP,
     getScholarById: GET_SCHOLARSHIP_BY_ID,
+
+    getAllApplicants: GET_ALL_APPLICANTS,
   },
 });
 
@@ -32,6 +36,8 @@ const Mutation = new GraphQLObjectType({
     login: LOGIN,
 
     createScholarship: CREATE_SCHOLARSHIP,
+
+    createApplicants: CREATE_APPLICANTS,
   },
 });
 
