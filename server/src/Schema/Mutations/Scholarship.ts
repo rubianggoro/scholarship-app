@@ -1,6 +1,7 @@
 import { GraphQLInt, GraphQLList, GraphQLString } from "graphql";
 import { MessageType } from "../TypeDefs/Messages";
 import { Scholarship } from "../../Entities/Scholarship";
+import { Applicants } from "../../Entities/Applicants";
 
 export const CREATE_SCHOLARSHIP = {
   type: MessageType,
@@ -96,6 +97,37 @@ export const UPDATE_SCHOLARSHIP = {
     return {
       success: true,
       message: "SCHOLARSHIP UPDATED",
+    };
+  },
+};
+
+export const DELETE_SCHOLARSHIP = {
+  type: MessageType,
+  args: {
+    id: { type: GraphQLInt },
+  },
+  async resolve(parent: any, args: any) {
+    const { id } = args;
+
+    const scholar = await Scholarship.findOne({ where: { id: id } });
+
+    const applicants = await Applicants.find({ where: { scholarship_id: id } });
+
+    if (applicants) {
+      await Applicants.delete({
+        scholarship_id: id,
+      });
+    }
+
+    if (scholar) {
+      await Scholarship.delete({
+        id,
+      });
+    }
+
+    return {
+      success: true,
+      message: "SCHOLARSHIP DELETED",
     };
   },
 };

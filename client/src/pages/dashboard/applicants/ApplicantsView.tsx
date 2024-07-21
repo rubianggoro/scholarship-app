@@ -24,6 +24,11 @@ const ApplicantsView = () => {
       header: "Nama",
     },
     {
+      accessorKey: "scholarship",
+      header: "Nama Beasiswa",
+      cell: ({ row }: any) => row.getValue("scholarship")?.name,
+    },
+    {
       accessorKey: "last_education",
       header: "Pendidikan Terakhir",
     },

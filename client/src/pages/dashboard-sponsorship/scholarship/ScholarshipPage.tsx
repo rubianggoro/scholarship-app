@@ -4,11 +4,18 @@ import { Button } from "../../../components/ui/button";
 import { DataTable } from "../../../components/ui/data-table";
 import DashboardSponsorship from "../Layout";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { GET_SCHOLARSHIP_BY_USER_ID } from "../../../graphql/Query";
 import { FormatDate } from "../../../lib/utils";
+import Modal from "../../../components/ui/modal";
+import { useState } from "react";
+import { DELETE_SCHOLARSHIP } from "../../../graphql/Mutation";
+import { useToast } from "../../../components/ui/use-toast";
 
 const ScholarshipPage = () => {
+  const [scholarshipId, setScholarshipId] = useState(0);
+  const { toast } = useToast();
+  const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
   const { user_id } = useParams();
 
@@ -42,7 +49,14 @@ const ScholarshipPage = () => {
       cell: ({ row }: any) => {
         return (
           <div className="space-x-2">
-            <Button size={"sm"} variant={"destructive"}>
+            <Button
+              size={"sm"}
+              variant={"destructive"}
+              onClick={() => {
+                setIsOpen(true);
+                setScholarshipId(row.getValue("id"));
+              }}
+            >
               Hapus
             </Button>
             <Button
@@ -79,6 +93,39 @@ const ScholarshipPage = () => {
       href: "#",
     },
   ];
+
+  const [deleteScholarship, { loading }] = useMutation(DELETE_SCHOLARSHIP, {
+    refetchQueries: [
+      {
+        query: GET_SCHOLARSHIP_BY_USER_ID,
+        variables: { user_id },
+      },
+    ],
+  });
+
+  const handleDelete = async () => {
+    const payload = {
+      id: Number(scholarshipId),
+    };
+
+    const result = await deleteScholarship({
+      variables: payload,
+    });
+
+    if (result.data?.deleteScholarship.success) {
+      toast({
+        title: "Berhasil Hapus Beasiswa!",
+        variant: "success",
+        description: "Anda berhasil hapus beasiswa",
+      });
+      setIsOpen(false);
+    } else {
+      toast({
+        title: "Gagal hapus beasiswa",
+        variant: "destructive",
+      });
+    }
+  };
   return (
     <DashboardSponsorship>
       <>
@@ -99,6 +146,30 @@ const ScholarshipPage = () => {
           <DataTable columns={columns} data={data?.getScholarByUserId || []} />
         </div>
       </>
+      <Modal open={isOpen} title={"Hapus Beasiswa?"}>
+        <div>
+          <p className="text-neutral-700 text-base">
+            Yakin ingin hapus beasiswa terpilih?
+          </p>
+          <div className="grid grid-cols-2 gap-4 mt-5">
+            <Button
+              size={"sm"}
+              variant={"outline"}
+              onClick={() => setIsOpen(false)}
+            >
+              Batalkan
+            </Button>
+            <Button
+              variant={"destructive"}
+              size={"sm"}
+              onClick={handleDelete}
+              disabled={loading}
+            >
+              Hapus Beasiswa
+            </Button>
+          </div>
+        </div>
+      </Modal>
     </DashboardSponsorship>
   );
 };

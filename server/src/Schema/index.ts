@@ -8,6 +8,7 @@ import {
 } from "./Mutations/User";
 import {
   CREATE_SCHOLARSHIP,
+  DELETE_SCHOLARSHIP,
   UPDATE_SCHOLARSHIP,
 } from "./Mutations/Scholarship";
 import {
@@ -49,6 +50,7 @@ const Mutation = new GraphQLObjectType({
 
     createScholarship: CREATE_SCHOLARSHIP,
     updateScholarship: UPDATE_SCHOLARSHIP,
+    deleteScholarship: DELETE_SCHOLARSHIP,
 
     createApplicants: CREATE_APPLICANTS,
     updateStatusApplicant: UPDATE_STATUS_APPLICANT,

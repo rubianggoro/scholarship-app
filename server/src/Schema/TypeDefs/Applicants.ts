@@ -3,9 +3,12 @@ import {
   GraphQLID,
   GraphQLString,
   GraphQLInt,
+  GraphQLList,
 } from "graphql";
+import { ScholarshipType } from "./Scholarship";
+import { Scholarship } from "../../Entities/Scholarship";
 
-export const ApplicantsType = new GraphQLObjectType({
+export const ApplicantsType: any = new GraphQLObjectType({
   name: "Applicants",
   fields: () => ({
     id: { type: GraphQLID },
@@ -16,5 +19,11 @@ export const ApplicantsType = new GraphQLObjectType({
     short_self_desc: { type: GraphQLString },
     document_upload: { type: GraphQLString },
     status: { type: GraphQLInt },
+    scholarship: {
+      type: ScholarshipType,
+      resolve(parent, args) {
+        return Scholarship.findOne({ where: { id: parent.scholarship_id } });
+      },
+    },
   }),
 });

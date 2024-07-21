@@ -117,3 +117,12 @@ export const UPDATE_SCHOLARSHIP = gql`
     }
   }
 `;
+
+export const DELETE_SCHOLARSHIP = gql`
+  mutation deleteScholarship($id: Int!) {
+    deleteScholarship(id: $id) {
+      success
+      message
+    }
+  }
+`;

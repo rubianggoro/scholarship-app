@@ -81,6 +81,9 @@ export const GET_APPLICANTS_BY_USER_ID = gql`
       status
       last_education
       document_upload
+      scholarship {
+        name
+      }
     }
   }
 `;
