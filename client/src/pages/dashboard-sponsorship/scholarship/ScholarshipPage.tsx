@@ -3,12 +3,13 @@ import { BreadcrumbView } from "../../../components/ui/breadcrumbview";
 import { Button } from "../../../components/ui/button";
 import { DataTable } from "../../../components/ui/data-table";
 import DashboardSponsorship from "../Layout";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { GET_SCHOLARSHIP_BY_USER_ID } from "../../../graphql/Query";
 import { FormatDate } from "../../../lib/utils";
 
 const ScholarshipPage = () => {
+  const navigate = useNavigate();
   const { user_id } = useParams();
 
   const { data } = useQuery(GET_SCHOLARSHIP_BY_USER_ID, {
@@ -44,7 +45,15 @@ const ScholarshipPage = () => {
             <Button size={"sm"} variant={"destructive"}>
               Hapus
             </Button>
-            <Button size={"sm"} variant={"outline"}>
+            <Button
+              onClick={() =>
+                navigate(
+                  `/scholarship/upload?scholarshipId=${row.getValue("id")}`
+                )
+              }
+              size={"sm"}
+              variant={"outline"}
+            >
               Edit
             </Button>
             <Link

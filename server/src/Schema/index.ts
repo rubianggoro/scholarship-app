@@ -6,7 +6,10 @@ import {
   LOGIN,
   UPDATE_PASSWORD,
 } from "./Mutations/User";
-import { CREATE_SCHOLARSHIP } from "./Mutations/Scholarship";
+import {
+  CREATE_SCHOLARSHIP,
+  UPDATE_SCHOLARSHIP,
+} from "./Mutations/Scholarship";
 import {
   GET_ALL_SCHOLARSHIP,
   GET_SCHOLARSHIP_BY_ID,
@@ -45,6 +48,7 @@ const Mutation = new GraphQLObjectType({
     login: LOGIN,
 
     createScholarship: CREATE_SCHOLARSHIP,
+    updateScholarship: UPDATE_SCHOLARSHIP,
 
     createApplicants: CREATE_APPLICANTS,
     updateStatusApplicant: UPDATE_STATUS_APPLICANT,

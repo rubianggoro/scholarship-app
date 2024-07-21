@@ -14,8 +14,6 @@ const ApplicantsView = () => {
     variables: { user_id },
   });
 
-  console.log("data", data);
-
   const columns = [
     {
       accessorKey: "no_column",

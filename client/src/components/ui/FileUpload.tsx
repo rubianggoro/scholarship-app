@@ -9,9 +9,14 @@ import { cn } from "../../lib/utils";
 type FileUploadType = {
   result: (val: string) => any;
   errorMessage?: string;
+  disabled?: boolean;
 };
 
-const FileUpload = ({ result, errorMessage }: FileUploadType) => {
+const FileUpload = ({
+  result,
+  errorMessage,
+  disabled = false,
+}: FileUploadType) => {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
@@ -44,7 +49,7 @@ const FileUpload = ({ result, errorMessage }: FileUploadType) => {
       <Input
         id="picture"
         type="file"
-        disabled={isLoading}
+        disabled={isLoading || disabled}
         onChange={handleChange}
         className={cn(errorMessage ? "border-2 border-destructive" : "")}
       />

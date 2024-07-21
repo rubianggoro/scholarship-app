@@ -24,11 +24,12 @@ import { Textarea } from "../../components/ui/textarea";
 import FileUpload from "../../components/ui/FileUpload";
 import { Checkbox } from "../../components/ui/checkbox";
 import { useMutation, useQuery } from "@apollo/client";
-import { CREATE_SCHOLARSHIP } from "../../graphql/Mutation";
+import { CREATE_SCHOLARSHIP, UPDATE_SCHOLARSHIP } from "../../graphql/Mutation";
 import { useToast } from "../../components/ui/use-toast";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import {
   GET_ALL_SCHOLARSHIP,
+  GET_SCHOLARSHIP_BY_ID,
   GET_SCHOLARSHIP_BY_USER_ID,
   GET_USER_BY_EMAIL,
 } from "../../graphql/Query";
@@ -93,8 +94,17 @@ const items = [
 const levelStudent = ["SMA/SMK Sederajat", "S1", "S2", "S3"];
 
 const ScholarshipUpload = () => {
+  const [searchParams] = useSearchParams();
+  const scholarshipId = searchParams.get("scholarshipId");
+
   const navigate = useNavigate();
   const { toast } = useToast();
+
+  const { data } = useQuery(GET_SCHOLARSHIP_BY_ID, {
+    variables: { id: scholarshipId },
+  });
+
+  const detail = data?.getScholarById;
 
   const email = sessionStorage.getItem("email_user") || "";
   const { data: user } = useQuery(GET_USER_BY_EMAIL, {
@@ -104,12 +114,13 @@ const ScholarshipUpload = () => {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      name: "",
-      level_student: "",
-      short_description: "",
-      detailed_description: "",
-      banner_image: "",
-      document_upload: [],
+      name: detail ? detail?.name : "",
+      level_student: detail ? detail?.level_student : "",
+      short_description: detail ? detail?.short_description : "",
+      detailed_description: detail ? detail?.detailed_description : "",
+      banner_image: detail ? detail?.banner_image : "",
+      deadline: detail ? detail?.deadline : "",
+      document_upload: detail ? detail?.document_upload : [],
     },
   });
 
@@ -125,21 +136,50 @@ const ScholarshipUpload = () => {
     ],
   });
 
+  const [updateScholarship, { loading: isLoadingUpdate }] = useMutation(
+    UPDATE_SCHOLARSHIP,
+    {
+      refetchQueries: [
+        {
+          query: GET_ALL_SCHOLARSHIP,
+        },
+        {
+          query: GET_SCHOLARSHIP_BY_USER_ID,
+          variables: { user_id: user?.getUserByEmail?.id },
+        },
+      ],
+    }
+  );
+
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     const payload = {
       ...data,
+      id: scholarshipId ? Number(scholarshipId) : undefined,
       deadline: FormatDateLocal(data.deadline),
       user_id: Number(user?.getUserByEmail?.id),
     };
-    const result = await createScholarship({
-      variables: payload,
-    });
-    if (result.data?.createScholarship.success) {
+    const result = scholarshipId
+      ? await updateScholarship({
+          variables: payload,
+        })
+      : await createScholarship({
+          variables: payload,
+        });
+
+    if (!scholarshipId && result.data.createScholarship.success) {
       form.reset();
       toast({
         title: "Berhasil Unggah Beasiswa!",
         variant: "success",
         description: "Anda berhasil menambahkan Beasiswa",
+      });
+      navigate("/");
+    } else if (scholarshipId && result.data?.updateScholarship.success) {
+      form.reset();
+      toast({
+        title: "Berhasil Edit Beasiswa!",
+        variant: "success",
+        description: "Anda berhasil edit Beasiswa",
       });
       navigate("/");
     } else {
@@ -155,7 +195,7 @@ const ScholarshipUpload = () => {
       <Navbar />
       <div className="mx-auto max-w-7xl px-2 py-10 sm:px-6 lg:px-8">
         <h1 className="text-neutral-950 font-semibold text-3xl">
-          Unggah Beasiswa
+          {scholarshipId ? "Edit Beasiswa" : "Unggah Beasiswa"}
         </h1>
 
         <div className="mt-5">
@@ -279,6 +319,7 @@ const ScholarshipUpload = () => {
                       <FormControl>
                         <FileUpload
                           result={(e) => field.onChange(e)}
+                          disabled={scholarshipId ? true : false}
                           errorMessage={
                             form.formState.errors.banner_image?.message
                           }
@@ -365,7 +406,11 @@ const ScholarshipUpload = () => {
 
                 <div className="mt-10!">
                   <Button disabled={loading} type="submit" className="w-full">
-                    {loading ? "Loading..." : "Unggah Beasiswa"}
+                    {loading || isLoadingUpdate
+                      ? "Loading..."
+                      : scholarshipId
+                      ? "Edit Beasiswa"
+                      : "Unggah Beasiswa"}
                   </Button>
                 </div>
               </div>
