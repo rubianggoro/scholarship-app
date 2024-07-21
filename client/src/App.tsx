@@ -11,6 +11,7 @@ import ScholarshipDetail from "./pages/scholarship/ScholarshipDetail";
 import ScholarshipUpload from "./pages/scholarship/ScholarshipUpload";
 import ScholarshipPage from "./pages/dashboard-sponsorship/scholarship/ScholarshipPage";
 import ScholarshipDetailDashboard from "./pages/dashboard-sponsorship/scholarship/ScholarshipDetail";
+import ApplicantsView from "./pages/dashboard/applicants/ApplicantsView";
 
 const router = createBrowserRouter([
   {
@@ -36,7 +37,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/:user_id/dashboard",
-    element: <ScholarshipDetail />,
+    element: <ApplicantsView />,
     errorElement: <Page404 />,
   },
   {

@@ -12,7 +12,10 @@ import {
   GET_SCHOLARSHIP_BY_ID,
   GET_SCHOLARSHIP_BY_USER_ID,
 } from "./Queries/Scholarship";
-import { GET_ALL_APPLICANTS } from "./Queries/Applicants";
+import {
+  GET_ALL_APPLICANTS,
+  GET_APPLICANTS_BY_USER_ID,
+} from "./Queries/Applicants";
 import {
   CREATE_APPLICANTS,
   UPDATE_STATUS_APPLICANT,
@@ -29,6 +32,7 @@ const RootQuery = new GraphQLObjectType({
     getScholarByUserId: GET_SCHOLARSHIP_BY_USER_ID,
 
     getAllApplicants: GET_ALL_APPLICANTS,
+    getApplicantsByUserId: GET_APPLICANTS_BY_USER_ID,
   },
 });
 

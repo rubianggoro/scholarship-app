@@ -72,3 +72,15 @@ export const GET_SCHOLARSHIP_BY_USER_ID = gql`
     }
   }
 `;
+
+export const GET_APPLICANTS_BY_USER_ID = gql`
+  query getApplicantsByUserId($user_id: String!) {
+    getApplicantsByUserId(user_id: $user_id) {
+      id
+      name
+      status
+      last_education
+      document_upload
+    }
+  }
+`;
